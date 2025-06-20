@@ -34,7 +34,7 @@ const List = () => {
                 placeholder="Añadir tarea"
             />
 
-            <ul className="list-group">
+            {/* <ul className="list-group">
                 {items.map((item, index) => (
                     <li key={index} className="li-container list-group-item">{item}<button
                         className="delete-button"
@@ -44,7 +44,7 @@ const List = () => {
                     </button></li>
                 ))}
 
-            </ul>
+            </ul> */}
             <div className = "container my-2"> Tareas pendientes: {items.length} 
                 <button type="button" className="btn btn-danger mx-5" onClick={deleteAll}>Borrar todo</button>
             </div>
