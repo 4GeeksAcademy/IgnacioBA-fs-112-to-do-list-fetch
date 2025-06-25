@@ -10,9 +10,15 @@ const Home = () => {
 	const [newTask, setNewTask] = useState("");
 	const [userName, setUserName] = useState("");
 	const [userReady, setUserReady] = useState(false);
+	const [userHistory, setUserHistory] = useState([]);
+
+
 
 	const handleUserSubmit = () => {
 		if (userName.trim() === "") return;
+		if (!userHistory.includes(userName)) {
+			setUserHistory([...userHistory, userName]);
+		}
 		getTaskList(userName);
 	};
 
@@ -87,10 +93,29 @@ const Home = () => {
 	useEffect(() => {
 		console.log("Tareas actuales:", taskList);
 	}, [taskList]);
-	
+
 
 	return (
 		<div className="container text-center mt-5">
+			<div className="position-relative">
+				{/* Selector de usuario arriba a la derecha */}
+				<div className="position-absolute top-0 end-0 m-3">
+					<select
+						className="form-select form-select-sm w-auto"
+						value={userName}
+						onChange={(e) => {
+							const selectedUser = e.target.value;
+							setUserName(selectedUser);
+							setUserReady(false); // Vuelve al modo selección y recarga usuario
+							getTaskList(selectedUser);
+						}}
+					>
+						{userHistory.map((user, index) => (
+							<option key={index} value={user}>{user}</option>
+						))}
+					</select>
+				</div>
+			</div>
 			{!userReady ? (
 				<div>
 					<h2>Introduce tu nombre para cargar tus tareas:</h2>
@@ -130,6 +155,35 @@ const Home = () => {
 							</li>
 						))}
 					</ul>
+					<button
+						className="btn btn-secondary mb-3 my-3"
+						onClick={() => {
+							setUserReady(false);
+							setUserName("");
+							setTaskList([]);
+						}}>
+						Cambiar de usuario
+					</button>
+					{/* {userHistory.length > 1 && (
+						<div className="mb-3">
+							<label htmlFor="userSelector">Cambiar de usuario:</label>
+							<select
+								id="userSelector"
+								className="form-control w-50 mx-auto"
+								value={userName}
+								onChange={(e) => {
+									const selectedUser = e.target.value;
+									setUserName(selectedUser);
+									getTaskList(selectedUser);
+								}}>
+								{userHistory.map((user, index) => (
+									<option key={index} value={user}>
+										{user}
+									</option>
+								))}
+							</select>
+						</div>
+					)} */}
 				</div>
 			)}
 		</div>
